@@ -226,8 +226,8 @@ const App: React.FC = () => {
   }
 
   return (
-    <div className="bg-slate-900 text-white min-h-screen flex items-center justify-center p-4">
-      <div className="w-full max-w-4xl mx-auto flex flex-col h-screen">
+    <div className="bg-slate-900 text-white min-h-screen">
+      <div className="w-full max-w-4xl mx-auto flex flex-col min-h-screen p-4">
          <header className="w-full py-4 flex justify-between items-center flex-shrink-0">
           <div className="flex items-center gap-3">
             <h1 className="text-xl sm:text-2xl font-bold flex items-center gap-3">
