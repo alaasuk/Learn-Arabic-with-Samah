@@ -74,8 +74,9 @@ const App: React.FC = () => {
 
   useEffect(() => {
     try {
+      // FIX: Load student name as a plain string to prevent escaping issues.
       const savedName = localStorage.getItem('studentName');
-      if (savedName) setStudentName(JSON.parse(savedName));
+      if (savedName) setStudentName(savedName);
 
       const savedPoints = localStorage.getItem('studentPoints');
       if (savedPoints) setPoints(JSON.parse(savedPoints));
@@ -99,6 +100,7 @@ const App: React.FC = () => {
     }
   }, []);
 
+  // Generic function to save complex data as JSON
   const saveDataToLocalStorage = useCallback((key: string, data: any) => {
     try {
       localStorage.setItem(key, JSON.stringify(data));
@@ -107,7 +109,10 @@ const App: React.FC = () => {
     }
   }, []);
 
-  useEffect(() => { if (studentName) saveDataToLocalStorage('studentName', studentName) }, [studentName, saveDataToLocalStorage]);
+  // FIX: Save student name as a plain string.
+  useEffect(() => { if (studentName) localStorage.setItem('studentName', studentName) }, [studentName]);
+  
+  // Save other data using the JSON helper
   useEffect(() => { saveDataToLocalStorage('studentPoints', points) }, [points, saveDataToLocalStorage]);
   useEffect(() => { saveDataToLocalStorage('studentStreak', streak) }, [streak, saveDataToLocalStorage]);
   useEffect(() => { saveDataToLocalStorage('studentHistory', history) }, [history, saveDataToLocalStorage]);
@@ -228,18 +233,18 @@ const App: React.FC = () => {
   return (
     <div className="bg-slate-900 text-white min-h-screen">
       <div className="w-full max-w-4xl mx-auto flex flex-col min-h-screen p-4">
-         <header className="w-full py-4 flex justify-between items-center flex-shrink-0">
-          <div className="flex items-center gap-3">
+         <header className="w-full py-4 flex justify-between items-center flex-wrap gap-y-2 flex-shrink-0">
+          <div className="flex items-center gap-3 min-w-0">
             <h1 className="text-xl sm:text-2xl font-bold flex items-center gap-3">
-                <span className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center text-slate-900 font-extrabold text-lg">
+                <span className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center text-slate-900 font-extrabold text-lg flex-shrink-0">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-6 h-6">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 21l5.25-11.25L21 21m-9-3h7.5M3 5.621a48.474 48.474 0 016-.371m0 0c1.12 0 2.233.038 3.334.114M9 5.25V3m3.334 2.364C13.18 7.061 14.289 7.5 15.5 7.5c1.21 0 2.32-.439 3.166-1.136m0-1.415V3" />
                     </svg>
                 </span>
             </h1>
-            <div className="flex flex-col items-start">
+            <div className="flex flex-col items-start min-w-0">
               <span className="text-sm text-slate-400">أهلاً بك يا بطل</span>
-              <span className="font-bold text-lg text-green-400 -mt-1">{studentName}</span>
+              <span className="font-bold text-lg text-green-400 -mt-1 break-all">{studentName}</span>
             </div>
           </div>
 
