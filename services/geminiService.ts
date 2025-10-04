@@ -4,7 +4,7 @@ import { FillBlankExercise, MCQExercise, ReadingExercise, EducationalCard, Dicta
 // FIX: Switched from `import.meta.env` to `process.env.API_KEY` to align with coding guidelines and resolve the TypeScript error.
 // The API key is obtained from the environment variable `process.env.API_KEY`.
 // This variable is assumed to be pre-configured and accessible.
-const apiKey = process.env.API_KEY;
+const apiKey = import.meta.env.VITE_GOOGLE_API_KEY;
 
 if (!apiKey) {
   // This provides a clear error message in the developer console and on the screen if the API key is missing.
