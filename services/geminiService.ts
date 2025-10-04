@@ -4,7 +4,7 @@ import { FillBlankExercise, MCQExercise, ReadingExercise, EducationalCard, Dicta
 // FIX: Switched from `import.meta.env` to `process.env.API_KEY` to align with coding guidelines and resolve the TypeScript error.
 // The API key is obtained from the environment variable `process.env.API_KEY`.
 // This variable is assumed to be pre-configured and accessible.
-const apiKey = import.meta.env.VITE_GOOGLE_API_KEY;
+const apiKey = process.env.API_KEY;
 
 if (!apiKey) {
   // This provides a clear error message in the developer console and on the screen if the API key is missing.
@@ -140,12 +140,20 @@ export async function generateReadingComprehension(level: DifficultyLevel): Prom
   return json as ReadingExercise;
 }
 
+const grammarConceptsForCards = [
+  "أقسام الكلام (الاسم، الفعل، الحرف)", "الجملة الاسمية", "الجملة الفعلية", 
+  "المبتدأ والخبر", "الفاعل", "المفعول به", "اللام الشمسية والقمرية", 
+  "التنوين", "التاء المربوطة والمفتوحة", "أسماء الإشارة (هذا، هذه...)", 
+  "الأسماء الموصولة (الذي، التي...)", "حروف الجر", "حروف العطف", 
+  "المفرد والمثنى والجمع", "المذكر والمؤنث", "الصفة (النعت)", "ظرف الزمان والمكان"
+].join('، ');
+
 
 export async function generateEducationalCard(level: DifficultyLevel): Promise<EducationalCard> {
   const topic = getRandomTopic();
   const response = await ai.models.generateContent({
     model: "gemini-2.5-flash",
-    contents: `${BASE_PROMPT(topic, level)} أنشئي محتوى لـ 'بطاقة تعليمية'. يجب أن يكون الموضوع مفهومًا بسيطًا في قواعد اللغة العربية (مثل الاسم، الفعل، الصفة، حرف الجر)، مع شرح مبسط جدًا ومثال مرتبط بموضوع "${topic}".`,
+    contents: `${BASE_PROMPT(topic, level)} أنشئي محتوى لـ 'بطاقة تعليمية' عن واحد من المفاهيم النحوية التالية المناسبة للصف الرابع: ${grammarConceptsForCards}. اختاري مفهومًا واحدًا بشكل عشوائي وقدمي شرحًا مبسطًا جدًا له، مع مثال واضح عليه مرتبط بموضوع "${topic}".`,
     config: {
       responseMimeType: "application/json",
       responseSchema: {
