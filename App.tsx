@@ -75,7 +75,7 @@ const App: React.FC = () => {
   useEffect(() => {
     try {
       const savedName = localStorage.getItem('studentName');
-      if (savedName) setStudentName(savedName);
+      if (savedName) setStudentName(JSON.parse(savedName));
 
       const savedPoints = localStorage.getItem('studentPoints');
       if (savedPoints) setPoints(JSON.parse(savedPoints));
