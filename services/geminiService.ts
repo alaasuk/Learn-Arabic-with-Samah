@@ -1,13 +1,28 @@
 import { GoogleGenAI, Type } from "@google/genai";
 import { FillBlankExercise, MCQExercise, ReadingExercise, EducationalCard, DictationExercise, SentenceBuilderExercise } from '../types';
 
-// FIX: Per @google/genai guidelines, the API key must be obtained exclusively from process.env.API_KEY. This also resolves the TypeScript error related to import.meta.env.
-const apiKey = import.meta.env.VITE_GOOGLE_API_KEY;
+// FIX: Switched from `import.meta.env` to `process.env.API_KEY` to align with coding guidelines and resolve the TypeScript error.
+// The API key is obtained from the environment variable `process.env.API_KEY`.
+// This variable is assumed to be pre-configured and accessible.
+const apiKey = process.env.API_KEY;
+
 if (!apiKey) {
-    throw new Error("API_KEY environment variable is not set");
+  // This provides a clear error message in the developer console and on the screen if the API key is missing.
+  const rootElement = document.getElementById('root');
+  if (rootElement) {
+    rootElement.innerHTML = `
+      <div style="font-family: 'Cairo', sans-serif; background-color: #0f172a; color: white; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; text-align: center; padding: 20px; box-sizing: border-box;">
+        <h1 style="color: #f87171; font-size: 2rem; margin-bottom: 1rem;">خطأ في الإعدادات</h1>
+        <p style="font-size: 1.2rem; margin-bottom: 0.5rem;">لم يتم العثور على مفتاح الواجهة البرمجية (API Key).</p>
+        <p style="color: #9ca3af;">يرجى التأكد من أن متغير البيئة <code>API_KEY</code> قد تم إعداده بشكل صحيح.</p>
+      </div>
+    `;
+  }
+  throw new Error("API key not found. Please ensure API_KEY is set in your environment variables.");
 }
 
 const ai = new GoogleGenAI({ apiKey });
+
 
 const topics = [
   'عالم الحيوانات', 'الفضاء والكواكب', 'أعماق البحار', 'الاختراعات المدهشة', 
